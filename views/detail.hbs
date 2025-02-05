@@ -1,0 +1,140 @@
+<h1>{{post.title}}</h1>
+
+<div>
+    작성자 : <b>{{post.writer}}</b>
+</div>
+
+<div>
+    조회수 : {{post.hits}} | 작성일시 : {{dateString post.createdDt}}
+    {{!-- 글 수정 함수 호출 --}}
+    <button onclick="modifyPost()">수정</button>
+    {{!-- 글 삭제 함수 호출 --}}
+    <button onclick="deletePost()">삭제</button>
+</div>
+
+<div>
+    <pre>{{post.content}}</pre>
+</div>
+
+{{!-- 댓글 작성 영역 --}}   
+<section>
+    <div>
+        <h3>{{comments.length}}개의 댓글이 있습니다.</h3>
+    </div>
+
+    {{!-- 댓글 작성 --}}
+    <form action="/write-comment" method="post">
+        <input type="hidden" name="postId" value="{{post.id}}" />
+        <div>
+            <div>
+                <input type="text" name="name" placeholder="이름" />
+                <input type="password" name="password" placeholder="비밀번호" />
+            </div>
+            
+            <div>
+                <textarea name="comment" cols="30" rows="3" placeholder="댓글을 입력해주세요."></textarea>
+                <br />
+                <br />
+                <button type="submit">댓글 쓰기</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+{{!-- 댓글 표시 영역 --}}
+<section>
+    {{#each comments}}
+    <div style="border: 1px solid black;">
+        <div>
+            작성자: <b>{{this.name}}</b>
+        </div>
+        <div>
+            작성 일시 : {{dateString this.createdDt}}
+            <button onclick="deleteComment({{this.cid}})">삭제</button>
+        </div>
+        <div>
+            <pre>{{this.content}}</pre>
+        </div>
+    </div>
+    {{/each}}
+</section>
+
+<footer></footer>
+    <div>
+        <a href="/">목록으로</a>
+    </div>
+</footer>
+
+<script>
+    // Ajax를 사용하기 위해 fetch()함수 사용 예정, 이 함수도 promise를 반환하기에 시그니처에 async 사용
+    async function modifyPost() {
+        const password = prompt("password");
+        if (!password)  {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
+        // check-password API 실행
+        const response = await fetch('/check-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: "{{post.id}}", password }),
+        });
+        const data = await response.json();
+        console.log('[log] data in modifyPost of detail.hbs', data);
+        if(data.isExist) {
+            document.location.href = "/modify/{{post.id}}";
+        } else {
+            alert("비밀번호가 틀렸습니다.");
+        }
+    }
+
+    async function deletePost() {
+        console.log('삭제 함수 호출');
+
+        const password = prompt("input password");
+        if (!password)  {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
+        // 비밀번호 확인 로직 후, url 이동을 통해 삭제 url로 이동하는 식으로 설계할 경우 비밀번호 확인 없이 바로 해당 요청을 보내는 것 만으로 삭제 가능
+        const response = await fetch(`/delete`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: "{{post.id}}", password: password }),
+        });
+
+        const data = await response.json();
+        console.log('[log] data in deletePost of detail.hbs', data);
+        if(data.isSuccess) {
+            document.location.href = "/";
+        } else {
+            alert("비밀번호가 틀렸습니다.");
+        }
+    }
+
+
+    async function deleteComment(cid) {
+        console.log()
+        const password = prompt("input password");
+        if (!password) {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
+        const response = await fetch(`/delete-comment`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cid, password }),
+        });
+    }
+    
+</script>

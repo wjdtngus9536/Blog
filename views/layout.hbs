@@ -1,0 +1,12 @@
+{{!-- 파일명이 layout.hbs여야만 레이아웃이 적용된다. hbs 템플릿 엔진의 내부 로직이라고 생각됨 --}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    {{{body}}} {{!-- 중괄호 3개로 감싸야 됨 --}}
+  </body>
+</html>

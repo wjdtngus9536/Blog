@@ -1,0 +1,33 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  /* color: #00B7FF; */
+  color: rgba(8, 6, 6, 0.63);
+}
+
+/* .form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 80%;
+  padding: 0.5rem;
+}
+
+.button-group {
+  margin-top: 1rem;
+}
+
+.button-group button {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+} */

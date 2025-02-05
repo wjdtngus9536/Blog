@@ -1,0 +1,39 @@
+<h1>[{{title}}] 글 작성</h1>
+
+<div>
+    {{!-- 수정 페이지일 경우 action=/modify/:id, 아닐 경우 action=/write --}}
+    <form name="boardForm" method="POST" action="{{#if post}}/modify/{{post.id}}{{else}}/write{{/if}}">   
+        <input type="hidden" name="id" value="{{post.id}}">
+        
+        {{!-- 제목 입력 --}}
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" name="title" placeholder="제목을 넣어주세요" value="{{post.title}}" />
+        </div>
+
+        {{!-- 이름 입력 --}}
+        <div class="form-group">
+            <label>이름</label>
+            <input type="text" name="writer" placeholder="이름을 넣어주세요" value="{{post.writer}}" />
+        </div>
+
+        {{!-- 비밀번호 입력 --}}
+        <div class="form-group">
+            <label>비밀번호</label>
+            <input type="password" name="password" placeholder="비밀번호를 넣어주세요" value="{{post.password}}" />
+        </div>
+
+        {{!-- 본문 입력 --}}
+        <div class="form-group">
+            <label>본문을 입력하세요</label> <br />
+            <textarea name="content" id="" cols="50" rows="10">{{post.content}}</textarea>
+            <br />
+        </div>
+
+        {{!-- 버튼 영역 --}}
+        <div class="button-group">
+            <button type="submit">{{#if post}}수정{{else}}저장{{/if}}</button>
+            <button type="button" onclick="location.href='/'">취소</button>
+        </div>
+    </form>
+</div>

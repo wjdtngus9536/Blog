@@ -1,0 +1,95 @@
+<h1><a href="/">{{uppercase title}}</a></h1>
+
+<input type="text" name="search" id="search" value="{{search}}" size="30" placeholder="검색어를 입력하세요." />
+<button onclick="location.href=`/?search=${document.getElementById('search').value}`">검색</button>
+{{!-- 쿼리문 포함된 url 요청 --}}
+<br>
+
+{{!-- 글쓰기 페이지이동 링크 --}}   
+<a href="/write">글쓰기</a>
+<br>
+
+{{!-- 글 목록 --}}
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th width="50%">제목</th>
+                <th>작성자</th>
+                <th>조회수</th>
+                <th>등록일</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each posts}}
+            <tr>
+                <td><a href="/detail/{{id}}">{{title}} <span style="color: rgb(23, 92, 23);">[{{commentCount}}]</span></a></td>
+                <td align="center">{{writer}}</td>
+                <td align="center">{{hits}}</td>
+                <td align="center">{{dateString createdDt}}</td>
+            </tr>
+            {{/each}}   
+        </tbody>
+    </table>
+</div>
+
+{{!-- 페이징 영역 --}}
+
+{{#if search}}
+<div class="pagination"></div>
+    {{#with paginator}}
+    <a href="/?page=1&search={{@root.search}}">&lt;&lt;</a>
+
+    {{#if hasPrev}}
+    <a href="/?page={{prevPage}}&search={{@root.search}}">&lt;</a>
+    {{else}}
+    <a>&lt;</a>
+    {{/if}}
+
+    {{#each pageList}}
+    {{#if (eq . @root.paginator.page)}}
+    <a style="color: grey;">{{this}}</a>
+    {{else}}
+    <a href="/?page={{this}}&search={{@root.search}}">{{this}}</a>
+    {{/if}}
+    {{/each}}
+
+    {{#if hasNext}}
+    <a href="/?page={{nextPage}}&search={{@root.search}}">&gt;</a>
+    {{else}}
+    <a>&gt;</a>
+    {{/if}}
+
+    <a href="/?page={{lastPage}}&search={{@root.search}}">&gt;&gt;</a>
+    {{/with}}
+</div>
+
+{{else}}
+<div class="pagination"></div>
+    {{#with paginator}}
+    <a href="/?page=1">&lt;&lt;</a>
+
+    {{#if hasPrev}}
+    <a href="/?page={{prevPage}}">&lt;</a>
+    {{else}}
+    <a>&lt;</a>
+    {{/if}}
+
+    {{#each pageList}}
+    {{#if (eq . @root.paginator.page)}}
+    <a style="color: grey;">{{this}}</a>
+    {{else}}
+    <a href="/?page={{this}}">{{this}}</a>
+    {{/if}}
+    {{/each}}
+
+    {{#if hasNext}}
+    <a href="/?page={{nextPage}}">&gt;</a>
+    {{else}}
+    <a>&gt;</a>
+    {{/if}}
+
+    <a href="/?page={{lastPage}}">&gt;&gt;</a>
+    {{/with}}
+</div>
+{{/if}}
